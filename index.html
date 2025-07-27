@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimpeJá: Seu Marketplace de Limpeza</title>
+    <!-- Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Inter font to the whole body */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7; /* Light gray background for sections */
+        }
+        /* Hero Section specific styling */
+        .hero-section {
+            background-size: cover; /* Ajusta a imagem para cobrir toda a seção */
+            background-position: center; /* Centraliza a imagem de fundo */
+            background-repeat: no-repeat; /* Evita a repetição da imagem */
+            min-height: 100vh; /* Full viewport height */
+            position: relative;
+            overflow: hidden; /* Hide overflowing background elements */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 6rem; /* Space for the fixed header */
+            padding-bottom: 4rem; /* Space below the content */
+            background-color: #2563eb; /* Fallback color */
+        }
+        /* Overlay para legibilidade do texto sobre o banner */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Camada escura semi-transparente */
+            z-index: 1; /* Garante que o overlay fique abaixo do conteúdo e acima do banner */
+        }
+
+        /* Phone mockup styling for hero section */
+        .phone-mockup {
+            width: 300px; /* Fixed width for consistency */
+            height: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+            border-radius: 20px; /* Rounded corners for the phone frame */
+            overflow: hidden; /* Ensure image stays within rounded corners */
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease-out, opacity 0.4s ease-out; /* Adicionado opacidade à transição */
+            flex-shrink: 0; /* Prevents shrinking in flex container */
+            margin: 4em 1rem; /* Spacing between phones in slider */
+            opacity: 0.5; /* Opacidade padrão para os cards laterais */
+        }
+        /* Offset the center phone mockup slightly upwards */
+        .phone-mockup.active-center {
+            transform: translateY(-20px);
+            opacity: 1; /* Opacidade total para o card central */
+        }
+
+        /* Efeito de hover robusto e avançado para os mockups de telefone na seção Hero */
+        .phone-mockup:hover {
+            transform: translateY(-30px) scale(1.08) rotateY(5deg); /* Levanta, escala e rotaciona sutilmente */
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5); /* Sombra mais forte e pronunciada */
+            z-index: 20; /* Garante que o item em hover fique acima dos outros */
+            opacity: 1; /* Opacidade total no hover, mesmo para os laterais */
+        }
+
+        /* Ajuste para o telefone do meio no hover, considerando seu deslocamento inicial */
+        .phone-mockup.active-center:hover {
+            transform: translateY(-50px) scale(1.08) rotateY(5deg); /* Levanta mais, escala e rotaciona */
+        }
+
+        /* Ensure images fill their phone mockup containers */
+        .phone-mockup img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* Custom animations for background elements (circles) */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .bg-circle-1 {
+            animation: rotate 20s linear infinite; /* Continuous rotation */
+        }
+        .bg-circle-2 {
+            animation: rotate 25s linear infinite reverse; /* Reverse continuous rotation */
+        }
+        /* Social icons styling for hover effect */
+        .social-icons a {
+            transition: transform 0.2s ease-in-out; /* Smooth scale transition */
+        }
+        .social-icons a:hover {
+            transform: scale(1.1); /* Slightly enlarge on hover */
+        }
+        /* Responsive adjustments for phone mockups */
+        @media (max-width: 768px) {
+            .phone-mockup {
+                width: 200px; /* Smaller width on mobile */
+                opacity: 1; /* For mobile, keep full opacity on all visible phones */
+            }
+            .phone-mockup.active-center {
+                transform: translateY(0); /* Remove offset on mobile for better stacking */
+            }
+            .hero-section {
+                padding-top: 8rem; /* More padding on top for mobile */
+            }
+        }
+
+        /* Specific styling for the "Smart Services" section */
+        .smart-services-section {
+            background-color: #ffffff; /* White background */
+            padding: 5rem 0; /* Vertical padding */
+        }
+        /* Responsive adjustments for phone containers in Smart Services and Download App sections */
+        .smart-services-phone-container,
+        .download-app-phone-container {
+            position: relative;
+            width: 100%; /* Make it fluid by default */
+            max-width: 300px; /* Max width on larger screens */
+            height: 600px; /* Keep height fixed as it's a phone aspect ratio */
+            margin-right: 0; /* Reset margin for mobile */
+            margin-left: 0; /* Reset margin for mobile */
+            margin-bottom: 2rem; /* Add bottom margin for stacking on smaller screens */
+        }
+        .smart-services-phone,
+        .download-app-phone {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px; /* Slightly smaller than container for shadow/background */
+            height: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 10; /* Above the blue background */
+        }
+        .smart-services-blue-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px; /* Wider than phone */
+            height: 250px; /* Shorter than phone */
+            background-color: #2563eb; /* Blue color */
+            border-radius: 15px; /* Slightly rounded corners */
+            z-index: 5; /* Below the phone */
+        }
+        @media (min-width: 1024px) { /* Apply specific margins for large screens */
+            .smart-services-phone-container {
+                margin-right: 4rem; /* Space between phone and text on desktop */
+                margin-bottom: 0; /* Remove bottom margin on desktop */
+            }
+            .download-app-phone-container {
+                margin-left: 4rem; /* Space between text and phone on desktop */
+                margin-bottom: 0; /* Remove bottom margin on desktop */
+            }
+            .smart-services-section .flex-col-reverse-lg {
+                flex-direction: row; /* Ensure row on desktop */
+            }
+            .download-app-section .flex-col-lg {
+                flex-direction: row; /* Ensure row on desktop */
+            }
+        }
+        @media (max-width: 768px) { /* Adjust for mobile */
+            .smart-services-phone-container,
+            .download-app-phone-container {
+                max-width: 250px; /* Smaller max-width on mobile */
+                height: 500px; /* Adjust height for mobile */
+            }
+            .smart-services-phone,
+            .download-app-phone {
+                width: 230px; /* Adjust inner phone width */
+            }
+            .smart-services-blue-bg {
+                width: 300px;
+                height: 200px;
+            }
+        }
+
+        /* Testimonials Section specific styling */
+        .testimonial-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transição para hover */
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px); /* Leve elevação */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
+        }
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        /* FAQ Section specific styling */
+        .faq-item {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.125rem; /* text-lg */
+            color: #333;
+            transition: background-color 0.2s ease-in-out; /* Transição para hover */
+        }
+        .faq-question:hover {
+            background-color: #f0f0f0; /* Leve fundo cinza no hover */
+        }
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: #666;
+            line-height: 1.6;
+            max-height: 0; /* Hidden by default */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px; /* Adjust as needed to reveal content */
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg); /* Change plus to cross */
+        }
+        .faq-icon {
+            transition: transform 0.3s ease-out;
+            font-size: 1.5rem;
+        }
+
+        /* Download App Section specific styling - already responsive with flex-col/flex-row */
+
+        /* Aprimoramento da tipografia para um visual mais "top" */
+        h1 {
+            font-weight: 800; /* Extra bold for main titles */
+            line-height: 1.1; /* Tighter line height for impact */
+        }
+        h2 {
+            font-weight: 700; /* Bold for section titles */
+            line-height: 1.2;
+        }
+        p {
+            font-weight: 400; /* Regular for body text */
+            line-height: 1.7; /* Slightly more relaxed line height for readability */
+        }
+        /* Adjusting specific text elements for better visual hierarchy */
+        .hero-section p {
+            font-weight: 500; /* Medium weight for hero description */
+        }
+        .faq-question {
+            font-weight: 700; /* Bold for FAQ questions */
+        }
+
+        /* Slider container for phone mockups */
+        .phone-slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px; /* Adjust as needed */
+            overflow: hidden; /* Hide overflowing phones */
+            margin: 0 auto;
+            display: flex; /* Use flexbox for slider */
+            align-items: center;
+            justify-content: center;
+            padding: 0 40px; /* Space for arrows */
+        }
+
+        .phone-slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Smooth slide transition */
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            border-radius: 50%;
+            padding: 0.5rem;
+            cursor: pointer;
+            z-index: 30; /* Above phones and overlay */
+            color: white;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px; /* Robust size */
+            height: 50px; /* Robust size */
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .slider-arrow:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .slider-arrow.left {
+            left: 0;
+        }
+
+        .slider-arrow.right {
+            right: 0;
+        }
+        /* Hide arrows on very small screens if desired */
+        @media (max-width: 640px) {
+            .slider-arrow {
+                display: none;
+            }
+            .phone-slider-container {
+                padding: 0;
+            }
+        }
+
+        /* Logo Animation Styles (copied from logo.html) */
+        .logo-and-reflection-group-header { /* Novo nome para evitar conflito com um possível splash screen */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 120px; /* Ajuste o tamanho da logo no cabeçalho */
+            height: 40px; /* Ajuste a altura da logo no cabeçalho */
+            overflow: hidden; /* Esconde o reflexo que sairia do cabeçalho */
+        }
+
+        .logo-wrapper-header {
+            opacity: 1; /* Sempre visível no cabeçalho */
+            transform: scale(1); /* Sempre em escala normal no cabeçalho */
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-image-header {
+            width: 100%; /* Preenche o container do logo */
+            height: 100%; /* Preenche o container do logo */
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Reflexo no cabeçalho - pode ser menos pronunciado ou removido se não couber */
+        .reflection-wrapper-header {
+            display: none; /* Oculta o reflexo no cabeçalho para simplificar */
+            /* Se quiser o reflexo, ajuste as propriedades abaixo */
+            /*
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: absolute;
+            bottom: -30px; /* Ajuste a posição conforme necessário */
+            /* opacity: 0.2; /* Opacidade menor para o reflexo no cabeçalho */
+            /* z-index: 1; */
+            */
+        }
+
+        /* Animações de loop (keyframes) - Mantidas para o logo do cabeçalho se aplicável */
+        @keyframes logoRotateY {
+            0% { transform: rotateY(-5deg); }
+            50% { transform: rotateY(5deg); }
+            100% { transform: rotateY(-5deg); }
+        }
+
+        @keyframes logoPulseScale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* As animações de reflexo (TranslateY, SkewX, HueRotate, Opacity) não serão aplicadas ao logo do cabeçalho
+           se o reflexo for ocultado ou simplificado. */
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="absolute top-0 left-0 right-0 z-20 p-6 lg:px-12 flex items-center justify-between text-white">
+        <!-- Logo and Navigation Links -->
+        <div class="flex items-center space-x-8">
+            <!-- LOGO DO APLICATIVO COM ANIMAÇÃO -->
+            <div class="logo-and-reflection-group-header">
+                <div id="mainLogoWrapperHeader" class="logo-wrapper-header">
+                    <img src="images/logo2.png" alt="LimpeJá Logo" class="logo-image-header" onerror="this.onerror=null;this.src='https://placehold.co/120x40/000000/FFFFFF?text=LimpeJá+Logo';">
+                </div>
+                <!-- Reflexo Oculto no cabeçalho para simplificar -->
+                <div id="reflectionWrapperHeader" class="reflection-wrapper-header">
+                    <img src="images/logo2.png" alt="LimpeJá Logo Reflexo" class="logo-image-header" onerror="this.onerror=null;this.src='https://placehold.co/220x220/000000/FFFFFF?text=Reflexo';">
+                    <div class="reflection-gradient-overlay"></div>
+                </div>
+            </div>
+            <nav class="hidden lg:flex space-x-6 text-base">
+                <a href="#" class="hover:text-gray-300 transition-colors">Início</a>
+                <a href="#" class="hover:text-gray-300 transition-colors">Sobre</a>
+                <a href="#" class="hover:text-gray-300 transition-colors">Depoimentos</a>
+                <a href="#" class="hover:text-gray-300 transition-colors">Contato</a>
+            </nav>
+        </div>
+        <!-- Botões de Login e Cadastro removidos conforme solicitado -->
+    </header>
+
+    <!-- Hero Section - Main Content Area -->
+    <section class="hero-section" style="background-image: url('images/banner.png');">
+        <!-- Background elements (circles and shapes) -->
+        <div class="absolute top-0 left-0 w-full h-full z-0">
+            <!-- Large rotating circle (top-left) -->
+            <div class="absolute top-[-100px] left-[-100px] w-96 h-96 rounded-full bg-blue-500 opacity-20 blur-3xl bg-circle-1"></div>
+            <!-- Smaller rotating circle (bottom-right) -->
+            <div class="absolute bottom-[-50px] right-[-50px] w-64 h-64 rounded-full bg-blue-500 opacity-20 blur-3xl bg-circle-2"></div>
+            <!-- Subtle border circles -->
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-blue-400 rounded-full opacity-10"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-48 h-48 border-2 border-blue-400 rounded-full opacity-10"></div>
+            <!-- Arrow icon (visible on larger screens) -->
+            <div class="absolute right-[15%] top-1/2 transform -translate-y-1/2 text-white opacity-20 hidden md:block">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-right">
+                    <path d="m7 7 10 10"/><path d="M17 7v10H7"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Social Icons (Fixed on Left Side) -->
+        <div class="social-icons absolute left-6 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 text-white z-10">
+            <a href="#" class="text-xl hover:text-gray-300 transition-colors">f</a> <!-- Ícone do Facebook placeholder -->
+            <a href="#" class="text-xl hover:text-gray-300 transition-colors">t</a> <!-- Ícone do Twitter placeholder -->
+            <a href="#" class="text-xl hover:text-gray-300 transition-colors">in</a> <!-- Ícone do LinkedIn placeholder -->
+            <a href="#" class="text-xl hover:text-gray-300 transition-colors">ig</a> <!-- Ícone do Instagram placeholder -->
+        </div>
+
+        <!-- Main Content Wrapper (Text and Phones) -->
+        <div class="container mx-auto px-4 relative z-10 text-white text-center flex flex-col items-center justify-center">
+            <!-- Hero Text Content -->
+            <div class="max-w-4xl mx-auto space-y-6 mb-16">
+                <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
+                    LimpeJá: Seu Marketplace de Limpeza de Confiança
+                </h1>
+                <p class="text-base lg:text-lg text-blue-100 max-w-2xl mx-auto">
+                    Conectando clientes a profissionais de limpeza verificados para um lar impecável. Agendamento fácil, pagamentos seguros e serviço de confiança ao seu alcance.
+                </p>
+            </div>
+
+            <!-- Phone Mockups Slider -->
+            <div class="phone-slider-container">
+                <div class="slider-arrow left" onclick="moveSlider(-1)">&#10094;</div>
+                <div class="phone-slider-wrapper" id="phoneSlider">
+                    <!-- Phone 1 (1-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/1-Photoroom.png" alt="Tela do App LimpeJá 1" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+1';">
+                    </div>
+                    <!-- Phone 2 (2-Photoroom) -->
+                    <div class="phone-mockup active-center">
+                        <img src="images/2-Photoroom.png" alt="Tela do App LimpeJá 2" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+2';">
+                    </div>
+                    <!-- Phone 3 (3-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/3-Photoroom.png" alt="Tela do App LimpeJá 3" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+3';">
+                    </div>
+                    <!-- Phone 4 (4-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/4-Photoroom.png" alt="Tela do App LimpeJá 4" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+4';">
+                    </div>
+                    <!-- Phone 5 (5-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/5-Photoroom.png" alt="Tela do App LimpeJá 5" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+5';">
+                    </div>
+                    <!-- Phone 6 (6-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/6-Photoroom.png" alt="Tela do App LimpeJá 6" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+6';">
+                    </div>
+                    <!-- Phone 7 (7-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/7-Photoroom.png" alt="Tela do App LimpeJá 7" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+7';">
+                    </div>
+                    <!-- Phone 8 (8-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/8-Photoroom.png" alt="Tela do App LimpeJá 8" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+8';">
+                    </div>
+                    <!-- Phone 9 (9-Photoroom) -->
+                    <div class="phone-mockup">
+                        <img src="images/9-Photoroom.png" alt="Tela do App LimpeJá 9" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+9';">
+                    </div>
+                </div>
+                <div class="slider-arrow right" onclick="moveSlider(1)">&#10095;</div>
+            </div>
+
+            <!-- Download Badges for App Stores -->
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6 mt-8">
+                <a href="#" class="block">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixe na App Store" class="h-12">
+                </a>
+                <a href="#" class="block">
+                    <img src="images/gplay-Photoroom.png" alt="Disponível no Google Play" class="h-12" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg';">
+                    <!--  -->
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section (Placeholder) -->
+    <section class="bg-gray-50 py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Sobre Nós</h2>
+            <!-- Mais conteúdo relacionado a "Sobre Nós" seria adicionado aqui -->
+        </div>
+    </section>
+
+    <!-- LimpeJá's Smart Services Section -->
+    <section class="smart-services-section">
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center lg:justify-between">
+            <!-- Left Content: Phone Mockup and Blue Background -->
+            <div class="smart-services-phone-container">
+                <div class="smart-services-blue-bg"></div>
+                <div class="smart-services-phone">
+                    <img src="images/4-Photoroom.png" alt="Tela de Serviços do App LimpeJá" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/280x560/E0E0E0/333333?text=Tela+App+Serviços';">
+                </div>
+            </div>
+
+            <!-- Right Content: Text and Button -->
+            <div class="text-center lg:text-left max-w-xl lg:ml-12">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
+                    Serviços Inteligentes LimpeJá
+                </h2>
+                <p class="text-lg text-gray-600 mb-8">
+                    Experimente o futuro da limpeza doméstica. O LimpeJá oferece correspondência inteligente com profissionais qualificados, agendamento flexível e pagamentos seguros e sem complicações para uma experiência verdadeiramente sem esforço.
+                </p>
+                <button class="bg-blue-600 text-white hover:bg-blue-700 transition-colors px-8 py-3 rounded-full text-lg font-semibold">
+                    Saiba Mais
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Depoimentos</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
+                Ouça o que nossos clientes e profissionais satisfeitos têm a dizer sobre o LimpeJá.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Testimonial Card 1 -->
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/60x60/A0A0A0/FFFFFF?text=JD" alt="Avatar do Usuário" class="testimonial-avatar">
+                    <p class="text-gray-700 mb-4">
+                        "O LimpeJá transformou a forma como gerencio a limpeza da minha casa. Encontrar profissionais confiáveis agora é incrivelmente fácil e o processo de agendamento é impecável. Altamente recomendado!"
+                    </p>
+                    <p class="font-semibold text-gray-800">João Silva</p>
+                    <p class="text-sm text-gray-500">Cliente</p>
+                </div>
+                <!-- Testimonial Card 2 -->
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/60x60/B0B0B0/FFFFFF?text=JS" alt="Avatar do Usuário" class="testimonial-avatar">
+                    <p class="text-gray-700 mb-4">
+                        "Como profissional de limpeza, o LimpeJá aumentou significativamente minha base de clientes e simplificou o gerenciamento da minha agenda. O sistema de pagamento seguro é um grande diferencial!"
+                    </p>
+                    <p class="font-semibold text-gray-800">Joana Santos</p>
+                    <p class="text-sm text-gray-500">Profissional de Limpeza</p>
+                </div>
+                <!-- Testimonial Card 3 -->
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/60x60/C0C0C0/FFFFFF?text=RL" alt="Avatar do Usuário" class="testimonial-avatar">
+                    <p class="text-gray-700 mb-4">
+                        "O nível de profissionalismo e qualidade do serviço que encontrei através do LimpeJá é incomparável. É realmente uma plataforma confiável para todas as minhas necessidades de limpeza."
+                    </p>
+                    <p class="font-semibold text-gray-800">Roberto Lima</p>
+                    <p class="text-sm text-gray-500">Cliente</p>
+                </div>
+                <!-- Testimonial Card 4 -->
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/60x60/D0D0D0/FFFFFF?text=AE" alt="Avatar do Usuário" class="testimonial-avatar">
+                    <p class="text-gray-700 mb-4">
+                        "O LimpeJá oferece ferramentas excelentes para gerenciar meus serviços e ganhos. É um aplicativo essencial para qualquer profissional de limpeza autônomo que busca expandir seus negócios."
+                    </p>
+                    <p class="font-semibold text-gray-800">Alice Costa</p>
+                    <p class="text-sm text-gray-500">Profissional de Limpeza</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section class="py-20 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-12">Perguntas Frequentes</h2>
+            <div class="max-w-3xl mx-auto">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Como o LimpeJá me conecta com profissionais?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>O LimpeJá é um marketplace que conecta clientes a profissionais de limpeza verificados. Nosso aplicativo simplifica o agendamento, a comunicação e os pagamentos seguros, garantindo uma experiência segura e eficiente para ambas as partes.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item 2 -->
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>É seguro agendar pelo LimpeJá?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sim, a segurança é nossa prioridade máxima. Todos os profissionais passam por um rigoroso processo de verificação, incluindo checagem de antecedentes, validação de documentos e reconhecimento facial, para garantir a confiabilidade.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item 3 -->
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Como os profissionais são verificados?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nosso processo de verificação inclui validação de CPF, upload de documentos com OCR, selfie com comparação facial e prova de vida, e checagem de antecedentes criminais reais através de APIs integradas.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item 4 -->
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Quais tipos de serviços de limpeza estão disponíveis?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>O LimpeJá oferece uma ampla gama de serviços de limpeza, desde a limpeza doméstica padrão até tarefas especializadas, dependendo dos profissionais disponíveis em sua região. Você pode navegar por categoria ou buscar por serviços específicos.</p>
+                    </div>
+                </div>
+                <!-- FAQ Item 5 -->
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Como funciona o pagamento?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Os pagamentos são processados com segurança diretamente pela plataforma LimpeJá, incluindo suporte para PIX. Os profissionais recebem pagamentos garantidos, e os clientes desfrutam de uma experiência de transação simplificada e protegida.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Background circle for FAQ section -->
+            <div class="absolute bottom-[-100px] left-[-100px] w-96 h-96 rounded-full bg-blue-500 opacity-10 blur-3xl z-0"></div>
+        </div>
+    </section>
+
+    <!-- Download App Section -->
+    <section class="download-app-section">
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center lg:justify-between">
+            <!-- Left Content: Text and Download Badges -->
+            <div class="text-center lg:text-left max-w-xl lg:mr-12">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
+                    Baixe o Aplicativo LimpeJá
+                </h2>
+                <p class="text-lg text-gray-600 mb-8">
+                    Obtenha o aplicativo LimpeJá hoje e simplifique suas necessidades de limpeza doméstica. Encontre profissionais de confiança, gerencie agendamentos e desfrute de um lar impecavelmente limpo com facilidade.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
+                    <a href="#" class="block">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixe na App Store" class="h-12">
+                    </a>
+                    <a href="#" class="block">
+                        <img src="images/gplay-Photoroom.png" alt="Disponível no Google Play" class="h-12" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg';">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Content: Phone Mockup -->
+            <div class="download-app-phone-container">
+                <div class="download-app-phone">
+                    <img src="images/6-Photoroom.png" alt="Tela de Download do App LimpeJá" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/280x560/E0E0E0/333333?text=Tela+App+Baixar';">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // JavaScript for FAQ accordion functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    // Toggle active class on the clicked item
+                    item.classList.toggle('active');
+
+                    // Close other open FAQ items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // JavaScript for Phone Slider functionality
+            const phoneSlider = document.getElementById('phoneSlider');
+            const phoneMockups = phoneSlider.querySelectorAll('.phone-mockup');
+            const totalPhones = phoneMockups.length;
+            let currentIndex = 1; // Start with the second phone as active-center
+
+            function updateSliderPosition() {
+                const phoneWidth = phoneMockups[0].offsetWidth + (parseFloat(getComputedStyle(phoneMockups[0]).marginRight) * 2); // Get width + margins
+                const offset = -currentIndex * phoneWidth + (phoneSlider.offsetWidth / 2) - (phoneWidth / 2);
+                phoneSlider.style.transform = `translateX(${offset}px)`;
+
+                // Update active-center class and opacity
+                phoneMockups.forEach((phone, index) => {
+                    if (index === currentIndex) {
+                        phone.classList.add('active-center');
+                    } else {
+                        phone.classList.remove('active-center');
+                    }
+                });
+            }
+
+            function moveSlider(direction) {
+                currentIndex += direction;
+                if (currentIndex < 0) {
+                    currentIndex = totalPhones - 1;
+                } else if (currentIndex >= totalPhones) {
+                    currentIndex = 0;
+                }
+                updateSliderPosition();
+            }
+
+            // Initial positioning and update on resize
+            window.addEventListener('resize', updateSliderPosition);
+            updateSliderPosition(); // Set initial position
+
+            // JavaScript for Logo Animation in Header
+            const mainLogoWrapperHeader = document.getElementById('mainLogoWrapperHeader');
+            const reflectionWrapperHeader = document.getElementById('reflectionWrapperHeader');
+
+            // Apply initial styles for logo animation (no transition for initial state)
+            if (mainLogoWrapperHeader) {
+                mainLogoWrapperHeader.style.opacity = '1';
+                mainLogoWrapperHeader.style.transform = 'scale(1)';
+                mainLogoWrapperHeader.classList.add('animate-logo-rotateY', 'animate-logo-pulse-scale');
+            }
+            // The reflection is hidden in CSS, so no need to animate it here unless it becomes visible.
+        });
+    </script>
+</body>
+</html>

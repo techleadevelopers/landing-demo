@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimpeJá - Animação de Logo</title>
+    <!-- Google Font: Inter (para manter a consistência da fonte) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos globais e de fundo */
+        body {
+            margin: 0;
+            overflow: hidden; /* Garante que as animações não causem barras de rolagem */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            /* Gradiente de fundo replicando LinearGradient do React Native */
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8F8FF 50%, #E6F0FF 100%);
+        }
+
+        /* Contêiner principal para o logo e reflexo */
+        .logo-and-reflection-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative; /* Para posicionamento do grupo */
+        }
+
+        /* Estilos para o wrapper do logo principal */
+        .logo-wrapper {
+            opacity: 0; /* Começa invisível para a animação de entrada */
+            transform: scale(0.8); /* Começa menor para a animação de entrada */
+            transition: opacity 0.08s ease-out, transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transição para entrada */
+            position: relative; /* Para z-index e transformações */
+            z-index: 2; /* Garante que o logo fique acima do reflexo */
+        }
+
+        /* Estilos para a imagem do logo */
+        .logo-image {
+            width: 220px; /* LOGO_WIDTH */
+            height: 220px; /* LOGO_HEIGHT */
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Estilos para o contêiner do reflexo */
+        .reflection-wrapper {
+            width: 220px; /* LOGO_WIDTH */
+            height: 220px; /* LOGO_HEIGHT */
+            overflow: hidden;
+            position: absolute; /* Posiciona o reflexo abaixo do logo */
+            bottom: -164px; /* Ajuste para posicionar o reflexo abaixo do logo */
+            opacity: 0.5; /* Opacidade inicial para o reflexo */
+            /* Transição para as animações de loop */
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, filter 0.4s ease-in-out;
+            z-index: 1; /* Abaixo do logo */
+        }
+
+        /* Imagem dentro do reflexo (invertida) */
+        .reflection-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform: scaleY(-1); /* Inverte verticalmente para criar o reflexo */
+            transform-origin: center center; /* Garante que a inversão seja centralizada */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Camada de gradiente para o desvanecimento do reflexo */
+        .reflection-gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Gradiente desvanecendo de transparente para branco mais opaco */
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.7) 100%);
+        }
+
+        /* Animações de loop (keyframes) */
+        @keyframes logoRotateY {
+            0% { transform: rotateY(-5deg); }
+            50% { transform: rotateY(5deg); }
+            100% { transform: rotateY(-5deg); }
+        }
+
+        @keyframes logoPulseScale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes reflectionTranslateY {
+            0% { transform: translateY(0px) scaleY(-1); }
+            50% { transform: translateY(10px) scaleY(-1); } /* Move 10px para cima e para baixo */
+            100% { transform: translateY(0px) scaleY(-1); }
+        }
+
+        @keyframes reflectionSkewX {
+            0% { transform: skewX(-2deg); }
+            50% { transform: skewX(2deg); }
+            100% { transform: skewX(-2deg); }
+        }
+
+        @keyframes reflectionHueRotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Classes para aplicar as animações via JavaScript */
+        .animate-logo-rotateY {
+            animation: logoRotateY 4s ease-in-out infinite alternate;
+        }
+        .animate-logo-pulse-scale {
+            animation: logoPulseScale 1.5s ease-in-out infinite alternate;
+        }
+        .animate-reflection-translateY {
+            animation: reflectionTranslateY 2.5s ease-in-out infinite alternate;
+        }
+        .animate-reflection-skewX {
+            animation: reflectionSkewX 3s ease-in-out infinite alternate;
+        }
+        .animate-reflection-hue-rotate {
+            animation: reflectionHueRotate 5s linear infinite;
+        }
+        .animate-reflection-opacity {
+            animation: reflectionOpacity 2s ease-in-out infinite alternate;
+        }
+        @keyframes reflectionOpacity {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.2; }
+            100% { opacity: 0.5; }
+        }
+
+        /* Media queries para responsividade */
+        @media (max-width: 768px) {
+            .logo-image {
+                width: 180px;
+                height: 180px;
+            }
+            .reflection-wrapper {
+                width: 180px;
+                height: 180px;
+                bottom: -130px; /* Ajuste para telas menores */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-and-reflection-group">
+        <!-- Logo Principal -->
+        <div id="mainLogoWrapper" class="logo-wrapper">
+            <!-- Certifique-se de que 'images/logo2.png' está no diretório correto -->
+            <img src="images/logo2.png" alt="LimpeJá Logo" class="logo-image" onerror="this.onerror=null;this.src='https://placehold.co/220x220/000000/FFFFFF?text=Logo';">
+        </div>
+
+        <!-- Reflexo Inferior -->
+        <div id="reflectionWrapper" class="reflection-wrapper">
+            <!-- Certifique-se de que 'images/logo2.png' está no diretório correto -->
+            <img src="images/logo2.png" alt="LimpeJá Logo Reflexo" class="logo-image" onerror="this.onerror=null;this.src='https://placehold.co/220x220/000000/FFFFFF?text=Reflexo';">
+            <div class="reflection-gradient-overlay"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainLogoWrapper = document.getElementById('mainLogoWrapper');
+            const reflectionWrapper = document.getElementById('reflectionWrapper');
+
+            // Animação de entrada do logo
+            setTimeout(() => {
+                mainLogoWrapper.style.opacity = '1';
+                mainLogoWrapper.style.transform = 'scale(1)';
+
+                // Inicia as animações de loop após a animação de entrada
+                setTimeout(() => {
+                    mainLogoWrapper.classList.add('animate-logo-rotateY', 'animate-logo-pulse-scale');
+                    reflectionWrapper.classList.add('animate-reflection-translateY', 'animate-reflection-skewX', 'animate-reflection-hue-rotate', 'animate-reflection-opacity');
+                }, 80); /* Duração da animação de entrada */
+
+            }, 100); /* Pequeno delay para garantir que o DOM esteja pronto */
+
+            // Redirecionamento automático após 6 segundos (ajuste conforme necessário)
+            setTimeout(() => {
+                console.log("Redirecionando automaticamente após 6 segundos.");
+                // window.location.href = '/auth/login'; // Substitua pela sua URL de login
+            }, 6000);
+        });
+    </script>
+</body>
+</html>
