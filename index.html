@@ -4,11 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LimpeJá: Seu Marketplace de Limpeza</title>
-    <!-- Tailwind CSS CDN for utility classes -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* FONTS: Tex Gotham Condensed - DECLARAÇÕES */
+        @font-face {
+            font-family: 'Gotham Condensed';
+            src: url('fonts/GothamCondensed-Light.woff2') format('woff2'),
+                 url('fonts/GothamCondensed-Light.woff') format('woff');
+            font-weight: 300; /* Light */
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Gotham Condensed';
+            src: url('fonts/GothamCondensed-Book.woff2') format('woff2'),
+                 url('fonts/GothamCondensed-Book.woff') format('woff');
+            font-weight: 400; /* Book / Regular */
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Gotham Condensed';
+            src: url('fonts/GothamCondensed-Medium.woff2') format('woff2'),
+                 url('fonts/GothamCondensed-Medium.woff') format('woff');
+            font-weight: 500; /* Medium */
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Gotham Condensed';
+            src: url('fonts/GothamCondensed-Bold.woff2') format('woff2'),
+                 url('fonts/GothamCondensed-Bold.woff') format('woff');
+            font-weight: 700; /* Bold */
+            font-style: normal;
+            font-display: swap;
+        }
+        /* FIM DAS DECLARAÇÕES @font-face para Gotham Condensed */
+
+
         /* Apply Inter font to the whole body */
         body {
             font-family: 'Inter', sans-serif;
@@ -26,7 +61,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-top: 6rem; /* Space for the fixed header */
+            /* AJUSTE: Aumentando o padding-top para alinhar melhor o título LimpeJá abaixo da nav */
+            padding-top: 10rem; /* Aumentado para dar mais espaço, robusto */
             padding-bottom: 4rem; /* Space below the content */
             background-color: #2563eb; /* Fallback color */
         }
@@ -68,11 +104,6 @@
             opacity: 1; /* Opacidade total no hover, mesmo para os laterais */
         }
 
-        /* Ajuste para o telefone do meio no hover, considerando seu deslocamento inicial */
-        .phone-mockup.active-center:hover {
-            transform: translateY(-50px) scale(1.08) rotateY(5deg); /* Levanta mais, escala e rotaciona */
-        }
-
         /* Ensure images fill their phone mockup containers */
         .phone-mockup img {
             width: 100%;
@@ -90,12 +121,62 @@
         .bg-circle-2 {
             animation: rotate 25s linear infinite reverse; /* Reverse continuous rotation */
         }
-        /* Social icons styling for hover effect */
-        .social-icons a {
-            transition: transform 0.2s ease-in-out; /* Smooth scale transition */
+        /* Social icons styling for robust hover effects */
+        .social-icon-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .social-icons a:hover {
-            transform: scale(1.1); /* Slightly enlarge on hover */
+
+        .social-icon-container:hover {
+            transform: translateX(10px) scale(1.15);
+            filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.3));
+        }
+
+        .social-icon-bg {
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-icon-container:hover .social-icon-bg {
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4), 
+                        0 0 30px rgba(255, 255, 255, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .social-icon-pulse {
+            animation: socialPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes socialPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.1;
+            }
+        }
+
+        .social-icon-container:hover .social-icon-pulse {
+            animation: socialPulseHover 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes socialPulseHover {
+            0%, 100% {
+                transform: scale(1.2);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.1;
+            }
         }
         /* Responsive adjustments for phone mockups */
         @media (max-width: 768px) {
@@ -111,75 +192,72 @@
             }
         }
 
-        /* Specific styling for the "Smart Services" section */
+        /* Specific styling for the "Smart Services" section (now Security Section) */
         .smart-services-section {
             background-color: #ffffff; /* White background */
             padding: 5rem 0; /* Vertical padding */
         }
-        /* Responsive adjustments for phone containers in Smart Services and Download App sections */
-        .smart-services-phone-container,
-        .download-app-phone-container {
+        /* Responsive adjustments for phone containers in Smart Services (ORIGINAL) */
+        .smart-services-phone-container {
             position: relative;
             width: 100%; /* Make it fluid by default */
-            max-width: 300px; /* Max width on larger screens */
-            height: 600px; /* Keep height fixed as it's a phone aspect ratio */
+            max-width: 500px; /* Definido um max-width para o container do celular */
+            height: 800px; /* Aumentado para o celular ficar maior */
             margin-right: 0; /* Reset margin for mobile */
             margin-left: 0; /* Reset margin for mobile */
             margin-bottom: 2rem; /* Add bottom margin for stacking on smaller screens */
+            display: flex; /* Adicionado para centralizar a imagem dentro do container */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
         }
-        .smart-services-phone,
-        .download-app-phone {
-            position: absolute;
+        .smart-services-phone {
+            position: absolute; /* Posição absoluta para sobrepor o fundo */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px; /* Slightly smaller than container for shadow/background */
-            height: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border-radius: 20px;
+            /* AJUSTE: Aumentando o tamanho da div do telefone */
+            width: 1300px; /* Definido um width fixo maior para a div do celular */
+            height: 1250px; /* Definido um height fixo maior para a div do celular */
             overflow: hidden;
-            z-index: 10; /* Above the blue background */
+            z-index: 10; /* Acima do fundo azul */
+        }
+        .smart-services-phone img {
+            width: 120%; /* A imagem preenche a div do telefone */
+            height: 100%; /* A imagem preenche a div do telefone */
+            object-fit: contain; /* Garante que a imagem se ajuste sem cortar */
         }
         .smart-services-blue-bg {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 350px; /* Wider than phone */
-            height: 250px; /* Shorter than phone */
-            background-color: #2563eb; /* Blue color */
-            border-radius: 15px; /* Slightly rounded corners */
-            z-index: 5; /* Below the phone */
+            width: 700px; /* Largura do fundo azul */
+            height: 400px; /* Altura do fundo azul */
+            background-color: rgba(152, 183, 248, 0.7); /* Cor azul com menos opacidade */
+            border-radius: 20px; /* Bordas arredondadas */
+            z-index: 5; /* Abaixo do telefone */
         }
         @media (min-width: 1024px) { /* Apply specific margins for large screens */
             .smart-services-phone-container {
                 margin-right: 4rem; /* Space between phone and text on desktop */
                 margin-bottom: 0; /* Remove bottom margin on desktop */
             }
-            .download-app-phone-container {
-                margin-left: 4rem; /* Space between text and phone on desktop */
-                margin-bottom: 0; /* Remove bottom margin on desktop */
-            }
             .smart-services-section .flex-col-reverse-lg {
-                flex-direction: row; /* Ensure row on desktop */
-            }
-            .download-app-section .flex-col-lg {
                 flex-direction: row; /* Ensure row on desktop */
             }
         }
         @media (max-width: 768px) { /* Adjust for mobile */
-            .smart-services-phone-container,
-            .download-app-phone-container {
-                max-width: 250px; /* Smaller max-width on mobile */
-                height: 500px; /* Adjust height for mobile */
+            .smart-services-phone-container {
+                max-width: 300px; /* Ajuste para telas menores */
+                height: 600px; /* Ajuste para telas menores */
             }
-            .smart-services-phone,
-            .download-app-phone {
-                width: 230px; /* Adjust inner phone width */
+            .smart-services-phone {
+                width: 280px; /* Ajuste para telas menores */
+                height: 560px; /* Ajuste para telas menores */
             }
             .smart-services-blue-bg {
-                width: 300px;
-                height: 200px;
+                width: 350px;
+                height: 250px;
             }
         }
 
@@ -247,14 +325,71 @@
             font-size: 1.5rem;
         }
 
-        /* Download App Section specific styling - already responsive with flex-col/flex-row */
+        /* Download App Section specific styling (Isolando para não afetar Smart Services) */
+        .download-app-section {
+            padding: 5rem 0; /* Adiciona padding para esta seção */
+        }
+
+        /* Novas regras específicas para o container do telefone do download-app-section */
+        .download-app-section .download-app-phone-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* Mantém um max-width para o container */
+            height: 80px; /* Mantém a altura para o container do telefone aqui, se desejar um tamanho fixo */
+            margin-bottom: 2rem; /* Espaço inferior para mobile */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .download-app-section .footer-app-phone {
+            position: absolute; /* Mantém a posição absoluta para o efeito de sobreposição se necessário */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px; /* Tamanho do mock-up do telefone */
+            height: 560px; /* Tamanho do mock-up do telefone */
+            overflow: hidden;
+            z-index: 10;
+        }
+        .download-app-section .footer-app-phone img {
+            width: 100%; /* Imagem preenche o container do telefone */
+            height: 100%;
+            object-fit: contain; /* Garante que a imagem se ajuste */
+        }
+
+        @media (min-width: 1024px) {
+            .download-app-section .download-app-phone-container {
+                margin-left: 4rem; /* Espaço entre texto e telefone em desktop */
+                margin-bottom: 0;
+            }
+        }
+        @media (max-width: 768px) { /* Ajuste para mobile */
+            .download-app-section .download-app-phone-container {
+                max-width: 300px;
+                height: 600px; /* Ajuste para telas menores */
+            }
+            .download-app-section .footer-app-phone {
+                width: 280px;
+                height: 560px;
+            }
+        }
 
         /* Aprimoramento da tipografia para um visual mais "top" */
         h1 {
-            font-weight: 800; /* Extra bold for main titles */
+            font-family: 'Gotham Condensed', sans-serif; /* Aplicando Gotham Condensed ao H1 */
+            font-weight: 700; /* Use Bold para um H1 impactante */
             line-height: 1.1; /* Tighter line height for impact */
+            /* AJUSTE: Tamanho da fonte do título LimpeJá - AGORA COM !IMPORTANT */
+            font-size: 2.5rem !important; /* Aumentado e com !important para garantir a prioridade */
+        }
+        @media (min-width: 1024px) {
+            h1 {
+                font-size: 2.5rem !important; /* Aumentado para telas maiores e com !important */
+            }
         }
         h2 {
+            font-family: 'Gotham Condensed', sans-serif; /* Aplicando Gotham Condensed ao H2 */
             font-weight: 700; /* Bold for section titles */
             line-height: 1.2;
         }
@@ -270,160 +405,406 @@
             font-weight: 700; /* Bold for FAQ questions */
         }
 
-        /* Slider container for phone mockups */
+        /* Advanced Slider container for phone mockups */
         .phone-slider-container {
             position: relative;
             width: 100%;
-            max-width: 1200px; /* Adjust as needed */
-            overflow: hidden; /* Hide overflowing phones */
+            max-width: 1200px;
+            overflow: hidden;
             margin: 0 auto;
-            display: flex; /* Use flexbox for slider */
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 40px; /* Space for arrows */
+            padding: 0 60px;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            border-radius: 20px;
         }
 
         .phone-slider-wrapper {
             display: flex;
-            transition: transform 0.5s ease-in-out; /* Smooth slide transition */
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
         }
 
         .slider-arrow {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             cursor: pointer;
-            z-index: 30; /* Above phones and overlay */
+            z-index: 30;
             color: white;
-            font-size: 2rem;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px; /* Robust size */
-            height: 50px; /* Robust size */
-            transition: background-color 0.3s ease-in-out;
+            width: 60px;
+            height: 60px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .slider-arrow:hover {
-            background-color: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .slider-arrow:active {
+            transform: translateY(-50%) scale(0.95);
         }
 
         .slider-arrow.left {
-            left: 0;
+            left: 10px;
         }
 
         .slider-arrow.right {
-            right: 0;
+            right: 10px;
         }
-        /* Hide arrows on very small screens if desired */
+
+        .slider-arrow::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .slider-arrow:hover::before {
+            opacity: 1;
+            animation: arrowShine 2s infinite;
+        }
+
+        @keyframes arrowShine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced phone mockup animations */
+        .phone-mockup {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity, filter;
+        }
+
+        .phone-mockup:not(.active-center) {
+            opacity: 0.6;
+            filter: brightness(0.7) saturate(0.8) blur(1px);
+        }
+
+        .phone-mockup.active-center {
+            opacity: 1;
+            filter: brightness(1) saturate(1.1) drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 640px) {
+            .slider-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                padding: 0.5rem;
+            }
+            .phone-slider-container {
+                padding: 0 50px;
+            }
+            .slider-arrow.left {
+                left: 5px;
+            }
+            .slider-arrow.right {
+                right: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
             .slider-arrow {
                 display: none;
             }
             .phone-slider-container {
-                padding: 0;
+                padding: 0 20px;
             }
         }
 
-        /* Logo Animation Styles (copied from logo.html) */
-        .logo-and-reflection-group-header { /* Novo nome para evitar conflito com um possível splash screen */
+        /* Advanced Download App Section Animations */
+        .download-app-logo-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 400px;
+            perspective: 1000px;
+        }
+
+        .logo-animation-wrapper {
             position: relative;
-            width: 120px; /* Ajuste o tamanho da logo no cabeçalho */
-            height: 40px; /* Ajuste a altura da logo no cabeçalho */
-            overflow: hidden; /* Esconde o reflexo que sairia do cabeçalho */
+            width: 420px;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .logo-wrapper-header {
-            opacity: 1; /* Sempre visível no cabeçalho */
-            transform: scale(1); /* Sempre em escala normal no cabeçalho */
+        .logo-main-container {
             position: relative;
-            z-index: 2;
+            width: 280px;
+            height: 280px;
+            transform-style: preserve-3d;
+            animation: logoFloat 6s ease-in-out infinite;
         }
 
-        .logo-image-header {
-            width: 100%; /* Preenche o container do logo */
-            height: 100%; /* Preenche o container do logo */
-            object-fit: contain;
-            display: block;
+        .logo-main-container:hover {
+            animation-play-state: paused;
+            transform: translateY(-10px) rotateY(15deg) scale(1.1);
         }
 
-        /* Reflexo no cabeçalho - pode ser menos pronunciado ou removido se não couber */
-        .reflection-wrapper-header {
-            display: none; /* Oculta o reflexo no cabeçalho para simplificar */
-            /* Se quiser o reflexo, ajuste as propriedades abaixo */
-            /*
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        /* Custom Animations */
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0px) rotateY(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-15px) rotateY(5deg) scale(1.02);
+            }
+            50% {
+                transform: translateY(-10px) rotateY(0deg) scale(1.05);
+            }
+            75% {
+                transform: translateY(-20px) rotateY(-5deg) scale(1.02);
+            }
+        }
+
+        @keyframes spin-slow {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin-slow-reverse {
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0deg);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+        }
+
+        .animate-spin-slow-reverse {
+            animation: spin-slow-reverse 25s linear infinite;
+        }
+
+        /* Improved Typography for Download Section */
+        .download-app-section h2 {
+            font-family: 'Gotham Condensed', 'Inter', sans-serif;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .download-app-section p {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive for Download Section */
+        @media (max-width: 1024px) {
+            .download-app-logo-container {
+                margin-top: 3rem;
+                min-height: 400px;
+            }
+            
+            .logo-animation-wrapper {
+                width: 350px;
+                height: 350px;
+            }
+            
+            .logo-main-container {
+                width: 220px;
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .download-app-section h2 {
+                font-size: 2.5rem !important;
+                line-height: 1.1;
+            }
+            
+            .download-app-section p {
+                font-size: 1.125rem;
+            }
+            
+            .download-app-logo-container {
+                min-height: 300px;
+            }
+            
+            .logo-animation-wrapper {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .logo-main-container {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        /* --- ESTILOS PARA O FUNDO DA NAVBAR (BRANCO TRANSPARENTE, BLUR APAGADO, REFLEXO) --- */
+        .navbar-background-container {
+            pointer-events: none; /* Permite que cliques passem para os elementos abaixo */
+        }
+
+        .navbar-background {
+            /* Fundo branco transparente */
+            background: rgba(255, 255, 255, 0.08); /* Branco bem transparente */
+            backdrop-filter: blur(5px); /* Blur mais suave */
+            -webkit-backdrop-filter: blur(5px); /* Para compatibilidade com Safari */
+            animation: backgroundMovement 15s linear infinite alternate;
+            position: relative;
+            /* Adiciona uma borda sutil para um toque futurista */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .navbar-background::after {
+            content: '';
             position: absolute;
-            bottom: -30px; /* Ajuste a posição conforme necessário */
-            /* opacity: 0.2; /* Opacidade menor para o reflexo no cabeçalho */
-            /* z-index: 1; */
-            */
+            top: 10%; /* Ajustado para cobrir mais da altura */
+            left: -50%;
+            width: 200%;
+            height: 80%; /* Ajustado para cobrir mais da altura */
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent); /* Reflexo mais sutil */
+            animation: reflectionMovement 8s linear infinite alternate;
+            transform: skewX(-20deg);
+            opacity: 0.7; /* Opacidade um pouco menor para o reflexo */
         }
 
-        /* Animações de loop (keyframes) - Mantidas para o logo do cabeçalho se aplicável */
-        @keyframes logoRotateY {
-            0% { transform: rotateY(-5deg); }
-            50% { transform: rotateY(5deg); }
-            100% { transform: rotateY(-5deg); }
+        @keyframes backgroundMovement {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-5px) scale(1.01); } /* Movimento mais sutil */
         }
 
-        @keyframes logoPulseScale {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+        @keyframes reflectionMovement {
+            0% { transform: translateX(-50%) skewX(-20deg); opacity: 0.3; } /* Opacidade inicial mais baixa */
+            50% { opacity: 0.8; } /* Opacidade máxima no meio do trajeto */
+            100% { transform: translateX(50%) skewX(-20deg); opacity: 0.3; }
+        }
+        /* --- FIM DOS ESTILOS PARA O FUNDO DA NAVBAR --- */
+
+        /* --- NOVA FONTE E TAMANHO PARA A NAVEGAÇÃO --- */
+        header nav ul li a {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700; /* Mais robusto */
+            /* AJUSTE: Tamanho da fonte menor */
+            font-size: 0.8rem; /* Reduzido para ficar mais discreto */
+            padding: 0.75rem 1.25rem; /* Ajuste o padding para o novo estilo */
+            text-transform: uppercase; /* Dar um toque mais moderno */
+            letter-spacing: 1px; /* Espaçamento entre letras */
+            position: relative; /* Para o underline animado */
+        }
+        @media (min-width: 768px) { /* Aumenta um pouco em telas maiores, mas ainda menor que antes */
+            header nav ul li a {
+                font-size: 0.9rem; /* base do tailwind é 1rem */
+            }
         }
 
-        /* As animações de reflexo (TranslateY, SkewX, HueRotate, Opacity) não serão aplicadas ao logo do cabeçalho
-           se o reflexo for ocultado ou simplificado. */
+
+        header nav ul li a:hover {
+            color: #a7d0ff; /* Tom de azul mais claro no hover, mais vibrante */
+        }
+
+        /* Underline animado no hover */
+        header nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #a7d0ff; /* Cor do sublinhado */
+            transition: width 0.3s ease-out;
+        }
+
+        header nav ul li a:hover::after {
+            width: 80%; /* Largura do sublinhado no hover */
+        }
+
+        /* Garantindo que o espaçamento e centralização sejam adequados */
+        header {
+            background: transparent; /* A cor do header será controlada pelo .navbar-background */
+        }
+        /* Ajuste para telas pequenas */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem; /* Reduz padding em telas menores */
+            }
+            header nav ul {
+                flex-direction: column;
+                align-items: center;
+                space-y-2;
+            }
+            header nav ul li a {
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* Ajustes para a seção 'Sobre Nós' existente (renomeada para 'why-choose-section') para não ser genérica e ajustar os mockups */
+        /* Removendo a seção "Sobre Nós" genérica e otimizando "Serviços Inteligentes LimpeJá" */
+        /* Esta seção não existe mais como "Sobre Nós", ela foi alterada para a seção de recursos, mas se ainda existir, os estilos abaixo ajudarão. */
+        .about-us-section { /* Se você mantiver a seção "Sobre Nós" original, pode usar este nome */
+             background-color: #f7f7f7;
+             padding: 5rem 0;
+             text-align: center;
+        }
+        /* Ajustes específicos para a seção Smart Services para robustez e alinhamento */
+        .smart-services-section .container {
+            align-items: center; /* Garante que os itens estão centralizados verticalmente */
+            justify-content: center; /* Garante que os itens estão centralizados horizontalmente */
+            flex-direction: column; /* Padrão para mobile */
+        }
+
+        @media (min-width: 1024px) {
+            .smart-services-section .container {
+                flex-direction: row; /* Volta para row em desktop */
+                justify-content: space-between; /* Espaço entre os elementos */
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="absolute top-0 left-0 right-0 z-20 p-6 lg:px-12 flex items-center justify-between text-white">
-        <!-- Logo and Navigation Links -->
-        <div class="flex items-center space-x-8">
-            <!-- LOGO DO APLICATIVO COM ANIMAÇÃO -->
-            <div class="logo-and-reflection-group-header">
-                <div id="mainLogoWrapperHeader" class="logo-wrapper-header">
-                    <img src="images/logo2.png" alt="LimpeJá Logo" class="logo-image-header" onerror="this.onerror=null;this.src='https://placehold.co/120x40/000000/FFFFFF?text=LimpeJá+Logo';">
-                </div>
-                <!-- Reflexo Oculto no cabeçalho para simplificar -->
-                <div id="reflectionWrapperHeader" class="reflection-wrapper-header">
-                    <img src="images/logo2.png" alt="LimpeJá Logo Reflexo" class="logo-image-header" onerror="this.onerror=null;this.src='https://placehold.co/220x220/000000/FFFFFF?text=Reflexo';">
-                    <div class="reflection-gradient-overlay"></div>
-                </div>
-            </div>
-            <nav class="hidden lg:flex space-x-6 text-base">
-                <a href="#" class="hover:text-gray-300 transition-colors">Início</a>
-                <a href="#" class="hover:text-gray-300 transition-colors">Sobre</a>
-                <a href="#" class="hover:text-gray-300 transition-colors">Depoimentos</a>
-                <a href="#" class="hover:text-gray-300 transition-colors">Contato</a>
-            </nav>
+    <header class="absolute top-0 left-0 right-0 z-20 p-6 lg:px-12 flex items-center justify-center text-white">
+        <div class="navbar-background-container absolute top-0 left-0 w-full h-full overflow-hidden z-[-1]">
+            <div class="navbar-background w-full h-full"></div>
         </div>
-        <!-- Botões de Login e Cadastro removidos conforme solicitado -->
+        <nav class="w-full flex justify-center">
+            <ul class="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-8 font-semibold">
+                <li><a href="#" class="text-white hover:text-blue-200">Início</a></li>
+                <li><a href="#" class="text-white hover:text-blue-200">Serviços</a></li>
+                <li><a href="#" class="text-white hover:text-blue-200">Depoimentos</a></li>
+                <li><a href="#" class="text-white hover:text-blue-200">FAQ</a></li>
+                <li><a href="#" class="text-white hover:text-blue-200">Contato</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <!-- Hero Section - Main Content Area -->
     <section class="hero-section" style="background-image: url('images/banner.png');">
-        <!-- Background elements (circles and shapes) -->
         <div class="absolute top-0 left-0 w-full h-full z-0">
-            <!-- Large rotating circle (top-left) -->
             <div class="absolute top-[-100px] left-[-100px] w-96 h-96 rounded-full bg-blue-500 opacity-20 blur-3xl bg-circle-1"></div>
-            <!-- Smaller rotating circle (bottom-right) -->
             <div class="absolute bottom-[-50px] right-[-50px] w-64 h-64 rounded-full bg-blue-500 opacity-20 blur-3xl bg-circle-2"></div>
-            <!-- Subtle border circles -->
             <div class="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-blue-400 rounded-full opacity-10"></div>
             <div class="absolute bottom-1/4 right-1/4 w-48 h-48 border-2 border-blue-400 rounded-full opacity-10"></div>
-            <!-- Arrow icon (visible on larger screens) -->
             <div class="absolute right-[15%] top-1/2 transform -translate-y-1/2 text-white opacity-20 hidden md:block">
                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-right">
                     <path d="m7 7 10 10"/><path d="M17 7v10H7"/>
@@ -431,109 +812,134 @@
             </div>
         </div>
 
-        <!-- Social Icons (Fixed on Left Side) -->
-        <div class="social-icons absolute left-6 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 text-white z-10">
-            <a href="#" class="text-xl hover:text-gray-300 transition-colors">f</a> <!-- Ícone do Facebook placeholder -->
-            <a href="#" class="text-xl hover:text-gray-300 transition-colors">t</a> <!-- Ícone do Twitter placeholder -->
-            <a href="#" class="text-xl hover:text-gray-300 transition-colors">in</a> <!-- Ícone do LinkedIn placeholder -->
-            <a href="#" class="text-xl hover:text-gray-300 transition-colors">ig</a> <!-- Ícone do Instagram placeholder -->
+        <div class="social-icons absolute left-4 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 text-white z-10">
+            <a href="#" class="social-icon-container relative group">
+                <div class="social-icon-bg absolute inset-0 rounded-full bg-blue-600 opacity-80 scale-100 group-hover:scale-110 transition-all duration-300"></div>
+                <div class="social-icon-pulse absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-30"></div>
+                <div class="relative z-10 p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </div>
+            </a>
+            
+            <a href="#" class="social-icon-container relative group">
+                <div class="social-icon-bg absolute inset-0 rounded-full bg-blue-500 opacity-80 scale-100 group-hover:scale-110 transition-all duration-300"></div>
+                <div class="social-icon-pulse absolute inset-0 rounded-full bg-blue-300 animate-ping opacity-30"></div>
+                <div class="relative z-10 p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </div>
+            </a>
+            
+            <a href="#" class="social-icon-container relative group">
+                <div class="social-icon-bg absolute inset-0 rounded-full bg-green-500 opacity-80 scale-100 group-hover:scale-110 transition-all duration-300"></div>
+                <div class="social-icon-pulse absolute inset-0 rounded-full bg-green-300 animate-ping opacity-30"></div>
+                <div class="relative z-10 p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                    </svg>
+                </div>
+            </a>
+            
+            <a href="#" class="social-icon-container relative group">
+                <div class="social-icon-bg absolute inset-0 rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-orange-600 opacity-80 scale-100 group-hover:scale-110 transition-all duration-300"></div>
+                <div class="social-icon-pulse absolute inset-0 rounded-full bg-pink-400 animate-ping opacity-30"></div>
+                <div class="relative z-10 p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </div>
+            </a>
         </div>
 
-        <!-- Main Content Wrapper (Text and Phones) -->
         <div class="container mx-auto px-4 relative z-10 text-white text-center flex flex-col items-center justify-center">
-            <!-- Hero Text Content -->
-            <div class="max-w-4xl mx-auto space-y-6 mb-16">
-                <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
-                    LimpeJá: Seu Marketplace de Limpeza de Confiança
+            <div class="max-w-6xl mx-auto space-y-6 mb-16">
+                <h1 class="font-bold leading-tight">
+                    Seu Marketplace de Limpeza de Confiança
                 </h1>
-                <p class="text-base lg:text-lg text-blue-100 max-w-2xl mx-auto">
+                <p class="text-base lg:text-lg text-white max-w-2xl mx-auto">
                     Conectando clientes a profissionais de limpeza verificados para um lar impecável. Agendamento fácil, pagamentos seguros e serviço de confiança ao seu alcance.
                 </p>
             </div>
 
-            <!-- Phone Mockups Slider -->
             <div class="phone-slider-container">
-                <div class="slider-arrow left" onclick="moveSlider(-1)">&#10094;</div>
+                <div class="slider-arrow left">&#10094;</div>
                 <div class="phone-slider-wrapper" id="phoneSlider">
-                    <!-- Phone 1 (1-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/1-Photoroom.png" alt="Tela do App LimpeJá 1" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+1';">
                     </div>
-                    <!-- Phone 2 (2-Photoroom) -->
                     <div class="phone-mockup active-center">
                         <img src="images/2-Photoroom.png" alt="Tela do App LimpeJá 2" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+2';">
                     </div>
-                    <!-- Phone 3 (3-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/3-Photoroom.png" alt="Tela do App LimpeJá 3" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+3';">
                     </div>
-                    <!-- Phone 4 (4-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/4-Photoroom.png" alt="Tela do App LimpeJá 4" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+4';">
                     </div>
-                    <!-- Phone 5 (5-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/5-Photoroom.png" alt="Tela do App LimpeJá 5" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+5';">
                     </div>
-                    <!-- Phone 6 (6-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/6-Photoroom.png" alt="Tela do App LimpeJá 6" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+6';">
                     </div>
-                    <!-- Phone 7 (7-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/7-Photoroom.png" alt="Tela do App LimpeJá 7" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+7';">
                     </div>
-                    <!-- Phone 8 (8-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/8-Photoroom.png" alt="Tela do App LimpeJá 8" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+8';">
                     </div>
-                    <!-- Phone 9 (9-Photoroom) -->
                     <div class="phone-mockup">
                         <img src="images/9-Photoroom.png" alt="Tela do App LimpeJá 9" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/250x500/E0E0E0/333333?text=Tela+App+9';">
                     </div>
                 </div>
-                <div class="slider-arrow right" onclick="moveSlider(1)">&#10095;</div>
+                <div class="slider-arrow right">&#10095;</div>
             </div>
 
-            <!-- Download Badges for App Stores -->
             <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6 mt-8">
                 <a href="#" class="block">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixe na App Store" class="h-12">
+                    <img src="images/gplay-Photoroom.png" alt="Disponível no Google Play" class="h-16" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg';">
                 </a>
-                <a href="#" class="block">
-                    <img src="images/gplay-Photoroom.png" alt="Disponível no Google Play" class="h-12" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg';">
-                    <!--  -->
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section (Placeholder) -->
-    <section class="bg-gray-50 py-20">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold text-gray-800">Sobre Nós</h2>
-            <!-- Mais conteúdo relacionado a "Sobre Nós" seria adicionado aqui -->
-        </div>
-    </section>
-
-    <!-- LimpeJá's Smart Services Section -->
-    <section class="smart-services-section">
-        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center lg:justify-between">
-            <!-- Left Content: Phone Mockup and Blue Background -->
-            <div class="smart-services-phone-container">
-                <div class="smart-services-blue-bg"></div>
-                <div class="smart-services-phone">
-                    <img src="images/4-Photoroom.png" alt="Tela de Serviços do App LimpeJá" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/280x560/E0E0E0/333333?text=Tela+App+Serviços';">
                 </div>
-            </div>
+        </div>
+    </section>
 
-            <!-- Right Content: Text and Button -->
-            <div class="text-center lg:text-left max-w-xl lg:ml-12">
-                <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
-                    Serviços Inteligentes LimpeJá
-                </h2>
-                <p class="text-lg text-gray-600 mb-8">
-                    Experimente o futuro da limpeza doméstica. O LimpeJá oferece correspondência inteligente com profissionais qualificados, agendamento flexível e pagamentos seguros e sem complicações para uma experiência verdadeiramente sem esforço.
+    <section class="smart-services-section">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-500 mb-[-20px] text-center">
+            Sua Segurança: Nossa Prioridade Absoluta
+        </h2>
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center lg:justify-between">
+            <div class="smart-services-phone-container">
+                
+                <div class="smart-services-phone">
+                    <img src="images/p-Photoroom.png" alt="Tela de Segurança do App LimpeJá" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/280x560/E0E0E0/333333?text=Tela+Seguranca';">
+                </div>
+                </div>
+            
+            <div class="relative left-[15em] lg:text-left max-w-xll lg:ml-12">
+                <p class="text-lg text-gray-600 mb-8 w-full max-w-6xl mx-auto lg:mx-0">
+                    No LimpeJá, sua segurança é a nossa prioridade. Somos seu parceiro de confiança, conectando você a profissionais verificados para um serviço impecável.
+                    <br><br>
+                    <b>Verificação de Identidade Rigorosa para Prestadores:</b>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Documentos: Análise de fotos da frente e verso de documentos de identificação.</li>
+                        <li>Reconhecimento Facial Avançado: Tecnologia com "liveness check" para confirmar identidade e evitar fraudes.</li>
+                        <li>OCR e Comparação Facial: Validação de autenticidade de documentos e da pessoa.</li>
+                        <li>Conformidade LGPD: Garantia de tratamento de dados com máxima segurança e privacidade.</li>
+                    </ul>
+                    <br>
+                    <b>Sua Experiência com o LimpeJá é:</b>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Praticidade e Confiança: Contrate profissionais verificados e qualificados.</li>
+                        <li>Transparência Total: Acesse perfis completos com experiência, preços e avaliações reais.</li>
+                        <li>Agendamento Simplificado e Seguro: Agende em poucos cliques, com pagamento seguro via PIX.</li>
+                        <li>Comunicação Direta: Chat em tempo real para dúvidas e suporte.</li>
+                        <li>Alertas e Notificações: Receba lembretes importantes sobre seu serviço.</li>
+                    </ul>
+                    <br>
+                    Com o LimpeJá, a busca pelo profissional ideal para seus serviços é feita com a segurança e tranquilidade que você merece.
                 </p>
                 <button class="bg-blue-600 text-white hover:bg-blue-700 transition-colors px-8 py-3 rounded-full text-lg font-semibold">
                     Saiba Mais
@@ -542,7 +948,6 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
     <section class="py-20 bg-gray-50">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold text-gray-800 mb-4">Depoimentos</h2>
@@ -550,7 +955,6 @@
                 Ouça o que nossos clientes e profissionais satisfeitos têm a dizer sobre o LimpeJá.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-                <!-- Testimonial Card 1 -->
                 <div class="testimonial-card">
                     <img src="https://placehold.co/60x60/A0A0A0/FFFFFF?text=JD" alt="Avatar do Usuário" class="testimonial-avatar">
                     <p class="text-gray-700 mb-4">
@@ -559,7 +963,6 @@
                     <p class="font-semibold text-gray-800">João Silva</p>
                     <p class="text-sm text-gray-500">Cliente</p>
                 </div>
-                <!-- Testimonial Card 2 -->
                 <div class="testimonial-card">
                     <img src="https://placehold.co/60x60/B0B0B0/FFFFFF?text=JS" alt="Avatar do Usuário" class="testimonial-avatar">
                     <p class="text-gray-700 mb-4">
@@ -568,7 +971,6 @@
                     <p class="font-semibold text-gray-800">Joana Santos</p>
                     <p class="text-sm text-gray-500">Profissional de Limpeza</p>
                 </div>
-                <!-- Testimonial Card 3 -->
                 <div class="testimonial-card">
                     <img src="https://placehold.co/60x60/C0C0C0/FFFFFF?text=RL" alt="Avatar do Usuário" class="testimonial-avatar">
                     <p class="text-gray-700 mb-4">
@@ -577,7 +979,6 @@
                     <p class="font-semibold text-gray-800">Roberto Lima</p>
                     <p class="text-sm text-gray-500">Cliente</p>
                 </div>
-                <!-- Testimonial Card 4 -->
                 <div class="testimonial-card">
                     <img src="https://placehold.co/60x60/D0D0D0/FFFFFF?text=AE" alt="Avatar do Usuário" class="testimonial-avatar">
                     <p class="text-gray-700 mb-4">
@@ -590,12 +991,10 @@
         </div>
     </section>
 
-    <!-- FAQs Section -->
     <section class="py-20 bg-white relative overflow-hidden">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl font-bold text-gray-800 mb-12">Perguntas Frequentes</h2>
             <div class="max-w-3xl mx-auto">
-                <!-- FAQ Item 1 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <span>Como o LimpeJá me conecta com profissionais?</span>
@@ -605,7 +1004,6 @@
                         <p>O LimpeJá é um marketplace que conecta clientes a profissionais de limpeza verificados. Nosso aplicativo simplifica o agendamento, a comunicação e os pagamentos seguros, garantindo uma experiência segura e eficiente para ambas as partes.</p>
                     </div>
                 </div>
-                <!-- FAQ Item 2 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <span>É seguro agendar pelo LimpeJá?</span>
@@ -615,7 +1013,6 @@
                         <p>Sim, a segurança é nossa prioridade máxima. Todos os profissionais passam por um rigoroso processo de verificação, incluindo checagem de antecedentes, validação de documentos e reconhecimento facial, para garantir a confiabilidade.</p>
                     </div>
                 </div>
-                <!-- FAQ Item 3 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <span>Como os profissionais são verificados?</span>
@@ -625,7 +1022,6 @@
                         <p>Nosso processo de verificação inclui validação de CPF, upload de documentos com OCR, selfie com comparação facial e prova de vida, e checagem de antecedentes criminais reais através de APIs integradas.</p>
                     </div>
                 </div>
-                <!-- FAQ Item 4 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <span>Quais tipos de serviços de limpeza estão disponíveis?</span>
@@ -635,7 +1031,6 @@
                         <p>O LimpeJá oferece uma ampla gama de serviços de limpeza, desde a limpeza doméstica padrão até tarefas especializadas, dependendo dos profissionais disponíveis em sua região. Você pode navegar por categoria ou buscar por serviços específicos.</p>
                     </div>
                 </div>
-                <!-- FAQ Item 5 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <span>Como funciona o pagamento?</span>
@@ -646,108 +1041,126 @@
                     </div>
                 </div>
             </div>
-            <!-- Background circle for FAQ section -->
             <div class="absolute bottom-[-100px] left-[-100px] w-96 h-96 rounded-full bg-blue-500 opacity-10 blur-3xl z-0"></div>
         </div>
     </section>
 
-    <!-- Download App Section -->
-    <section class="download-app-section">
-        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center lg:justify-between">
-            <!-- Left Content: Text and Download Badges -->
-            <div class="text-center lg:text-left max-w-xl lg:mr-12">
-                <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
-                    Baixe o Aplicativo LimpeJá
+    <section class="download-app-section bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 relative overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 animate-pulse"></div>
+        
+        <!-- Animated Background Elements -->
+        <div class="absolute top-10 left-10 w-32 h-32 rounded-full bg-blue-500/5 animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-24 h-24 rounded-full bg-purple-500/5 animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-blue-400/5 animate-bounce" style="animation-delay: 2s;"></div>
+        
+        <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between py-16 relative z-10">
+            <!-- Content Section -->
+            <div class="text-center lg:text-left max-w-2xl lg:mr-12 mb-12 lg:mb-0">
+                <h2 class="text-5xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-purple-200 mb-8 leading-tight tracking-tight">
+                    BAIXE O APP
+                    <span class="block text-4xl lg:text-6xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        LimpeJá
+                    </span>
                 </h2>
-                <p class="text-lg text-gray-600 mb-8">
-                    Obtenha o aplicativo LimpeJá hoje e simplifique suas necessidades de limpeza doméstica. Encontre profissionais de confiança, gerencie agendamentos e desfrute de um lar impecavelmente limpo com facilidade.
+                
+                <p class="text-xl lg:text-2xl text-gray-300 font-medium mb-12 leading-relaxed max-w-2xl">
+                    Transforme sua experiência de limpeza com tecnologia de ponta. 
+                    <span class="text-blue-300 font-semibold">Conecte-se</span> aos melhores profissionais, 
+                    <span class="text-purple-300 font-semibold">gerencie</span> tudo pelo app e tenha 
+                    <span class="text-blue-300 font-semibold">total segurança</span> em cada serviço.
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
-                    <a href="#" class="block">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Baixe na App Store" class="h-12">
+                
+                <!-- Call to Action -->
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-6 sm:space-y-0 sm:space-x-8">
+                    <a href="#" class="group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+                        <img src="images/gplay-Photoroom.png" alt="Disponível no Google Play" class="h-16 lg:h-20 relative z-10 filter drop-shadow-lg" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg';">
                     </a>
-                    <a href="#" class="block">
-                        <img src="images/gplay-Photoroom.png" alt="Disponível no Google Play" class="h-12" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg';">
-                    </a>
+                    
+                    <div class="text-center lg:text-left">
+                        <p class="text-lg font-bold text-white mb-1">BAIXE GRÁTIS</p>
+                        <p class="text-sm text-gray-400 font-medium">Android & iOS em breve</p>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-gray-700/50">
+                    <div class="text-center">
+                        <p class="text-3xl font-black text-blue-400 mb-2">500+</p>
+                        <p class="text-sm text-gray-400 font-medium">Profissionais</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-black text-purple-400 mb-2">100%</p>
+                        <p class="text-sm text-gray-400 font-medium">Verificados</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-3xl font-black text-blue-400 mb-2">24/7</p>
+                        <p class="text-sm text-gray-400 font-medium">Suporte</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Right Content: Phone Mockup -->
-            <div class="download-app-phone-container">
-                <div class="download-app-phone">
-                    <img src="images/6-Photoroom.png" alt="Tela de Download do App LimpeJá" class="rounded-2xl" onerror="this.onerror=null;this.src='https://placehold.co/280x560/E0E0E0/333333?text=Tela+App+Baixar';">
+            <!-- Animated Logo Section -->
+            <div class="download-app-logo-container relative">
+                <div class="logo-animation-wrapper relative z-20">
+                    <!-- Animated Background Circles -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-[500px] h-[500px] rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 animate-spin-slow"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-[420px] h-[420px] rounded-full bg-gradient-to-r from-purple-500/15 to-blue-500/15 animate-spin-slow-reverse"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-80 h-80 rounded-full bg-gradient-to-r from-blue-400/30 to-purple-400/30 animate-pulse"></div>
+                    </div>
+                    
+                    <!-- Logo Container -->
+                    <div class="relative z-30 w-96 h-96 flex items-center justify-center">
+                        <div class="logo-main-container group cursor-pointer transition-all duration-500 hover:scale-110">
+                            <!-- Glow Effect -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-4xl blur-2xl opacity-40 group-hover:opacity-60 transition-all duration-500 animate-pulse"></div>
+                            
+                            <!-- Logo Background -->
+                            <div class="relative bg-gradient-to-br from-white/15 to-white/8 backdrop-blur-sm rounded-4xl p-12 border border-white/25 shadow-2xl">
+                                <img src="images/logo2.png" 
+                                     alt="Logo LimpeJá Animada" 
+                                     class="w-full h-full object-contain filter drop-shadow-2xl transition-all duration-500 group-hover:drop-shadow-[0_0_40px_rgba(59,130,246,0.6)]" 
+                                     onerror="this.onerror=null;this.src='https://placehold.co/300x300/3B82F6/FFFFFF?text=LimpeJá';">
+                            </div>
+                            
+                            <!-- Floating Particles -->
+                            <div class="absolute top-4 right-4 w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+                            <div class="absolute bottom-4 left-4 w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
+                            <div class="absolute top-1/2 right-2 w-1 h-1 bg-blue-300 rounded-full animate-bounce" style="animation-delay: 2s;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom Wave Effect -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden">
+            <svg class="relative block w-full h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor" class="text-gray-800"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor" class="text-gray-800"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor" class="text-gray-800"></path>
+            </svg>
+        </div>
     </section>
 
-    <script>
-        // JavaScript for FAQ accordion functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const faqItems = document.querySelectorAll('.faq-item');
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>&copy; 2024 LimpeJá. Todos os direitos reservados.</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="hover:text-gray-400">Termos de Serviço</a>
+                <span class="text-gray-600">|</span>
+                <a href="#" class="hover:text-gray-400">Política de Privacidade</a>
+            </div>
+            </div>
+    </footer>
 
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question');
-                question.addEventListener('click', () => {
-                    // Toggle active class on the clicked item
-                    item.classList.toggle('active');
-
-                    // Close other open FAQ items
-                    faqItems.forEach(otherItem => {
-                        if (otherItem !== item && otherItem.classList.contains('active')) {
-                            otherItem.classList.remove('active');
-                        }
-                    });
-                });
-            });
-
-            // JavaScript for Phone Slider functionality
-            const phoneSlider = document.getElementById('phoneSlider');
-            const phoneMockups = phoneSlider.querySelectorAll('.phone-mockup');
-            const totalPhones = phoneMockups.length;
-            let currentIndex = 1; // Start with the second phone as active-center
-
-            function updateSliderPosition() {
-                const phoneWidth = phoneMockups[0].offsetWidth + (parseFloat(getComputedStyle(phoneMockups[0]).marginRight) * 2); // Get width + margins
-                const offset = -currentIndex * phoneWidth + (phoneSlider.offsetWidth / 2) - (phoneWidth / 2);
-                phoneSlider.style.transform = `translateX(${offset}px)`;
-
-                // Update active-center class and opacity
-                phoneMockups.forEach((phone, index) => {
-                    if (index === currentIndex) {
-                        phone.classList.add('active-center');
-                    } else {
-                        phone.classList.remove('active-center');
-                    }
-                });
-            }
-
-            function moveSlider(direction) {
-                currentIndex += direction;
-                if (currentIndex < 0) {
-                    currentIndex = totalPhones - 1;
-                } else if (currentIndex >= totalPhones) {
-                    currentIndex = 0;
-                }
-                updateSliderPosition();
-            }
-
-            // Initial positioning and update on resize
-            window.addEventListener('resize', updateSliderPosition);
-            updateSliderPosition(); // Set initial position
-
-            // JavaScript for Logo Animation in Header
-            const mainLogoWrapperHeader = document.getElementById('mainLogoWrapperHeader');
-            const reflectionWrapperHeader = document.getElementById('reflectionWrapperHeader');
-
-            // Apply initial styles for logo animation (no transition for initial state)
-            if (mainLogoWrapperHeader) {
-                mainLogoWrapperHeader.style.opacity = '1';
-                mainLogoWrapperHeader.style.transform = 'scale(1)';
-                mainLogoWrapperHeader.classList.add('animate-logo-rotateY', 'animate-logo-pulse-scale');
-            }
-            // The reflection is hidden in CSS, so no need to animate it here unless it becomes visible.
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
